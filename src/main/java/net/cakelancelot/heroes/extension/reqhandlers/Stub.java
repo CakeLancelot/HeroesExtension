@@ -1,4 +1,4 @@
-package net.cakelancelot.heroesextension.reqhandlers;
+package net.cakelancelot.heroes.extension.reqhandlers;
 
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.data.ISFSObject;

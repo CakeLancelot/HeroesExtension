@@ -1,4 +1,4 @@
-package net.cakelancelot.heroesextension.shared;
+package net.cakelancelot.heroes.shared;
 
 public class Vector3 {
     public double x, y, z;

@@ -1,4 +1,4 @@
-package net.cakelancelot.heroesextension.reqhandlers;
+package net.cakelancelot.heroes.extension.reqhandlers;
 
 import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.User;
@@ -7,7 +7,7 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.entities.variables.SFSUserVariable;
 import com.smartfoxserver.v2.entities.variables.UserVariable;
 import com.smartfoxserver.v2.extensions.BaseClientRequestHandler;
-import net.cakelancelot.heroesextension.HeroesZoneExtension;
+import net.cakelancelot.heroes.extension.HeroesZoneExtension;
 
 import java.util.ArrayList;
 import java.util.List;

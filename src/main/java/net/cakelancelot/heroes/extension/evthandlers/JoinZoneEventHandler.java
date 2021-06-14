@@ -1,4 +1,4 @@
-package net.cakelancelot.heroesextension.evthandlers;
+package net.cakelancelot.heroes.extension.evthandlers;
 
 import com.smartfoxserver.v2.core.ISFSEvent;
 import com.smartfoxserver.v2.core.SFSEventParam;
@@ -7,7 +7,7 @@ import com.smartfoxserver.v2.entities.data.*;
 import com.smartfoxserver.v2.entities.variables.SFSUserVariable;
 import com.smartfoxserver.v2.entities.variables.UserVariable;
 import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
-import net.cakelancelot.heroesextension.HeroesZoneExtension;
+import net.cakelancelot.heroes.extension.HeroesZoneExtension;
 
 import java.util.ArrayList;
 import java.util.List;

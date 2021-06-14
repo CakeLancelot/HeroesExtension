@@ -19,7 +19,7 @@ Currently, it is in the proof-of-concept/"landwalker" stage, **don't expect a fu
 2. In your SFS2X directory, drop HeroesExtension.jar into `extensions/Heroes` and HeroesCommon.jar into `extensions/__lib__`. Create the folders if they don't exist yet.
 3. Download the game's definition files (see [here](definitions/README.md) for instructions), then copy the `definitions` directory to `extensions/Heroes`. 
 4. Head to the SFS2X admin tool, and create a new zone: name it `Heroes`. Inside the zone, make sure you have a default "lobby" room.
-5. For the zone's extension, select `Heroes` for the name, `JAVA` as the type, and `net.cakelancelot.heroesextension.HeroesZoneExtension` as the main class. **Do not configure extensions on a per-room basis!** When a room is dynamically created, the room extension will be assigned accordingly.
+5. For the zone's extension, select `Heroes` for the name, `JAVA` as the type, and `net.cakelancelot.heroes.extension.HeroesZoneExtension` as the main class. **Do not configure extensions on a per-room basis!** When a room is dynamically created, the room extension will be assigned accordingly.
 6. Connect to the server using the game client! Note that there is a hardcoded "service director" URL that prevents connecting out of the box. Instructions on how to modify your client to accept an arbitrary director URL will be provided soon.
 
 # Contributing

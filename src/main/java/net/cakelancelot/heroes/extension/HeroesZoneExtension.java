@@ -1,13 +1,13 @@
-package net.cakelancelot.heroesextension;
+package net.cakelancelot.heroes.extension;
 
 import com.smartfoxserver.v2.core.SFSEventType;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.extensions.SFSExtension;
-import net.cakelancelot.heroesextension.shared.Mission;
-import net.cakelancelot.heroesextension.shared.Vector3;
-import net.cakelancelot.heroesextension.evthandlers.JoinZoneEventHandler;
-import net.cakelancelot.heroesextension.evthandlers.LeaveZoneEventHandler;
-import net.cakelancelot.heroesextension.reqhandlers.*;
+import net.cakelancelot.heroes.extension.evthandlers.LeaveZoneEventHandler;
+import net.cakelancelot.heroes.extension.evthandlers.JoinZoneEventHandler;
+import net.cakelancelot.heroes.extension.reqhandlers.*;
+import net.cakelancelot.heroes.shared.Mission;
+import net.cakelancelot.heroes.shared.Vector3;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 

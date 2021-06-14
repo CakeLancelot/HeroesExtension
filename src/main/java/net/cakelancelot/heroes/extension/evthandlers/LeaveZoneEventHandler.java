@@ -1,4 +1,4 @@
-package net.cakelancelot.heroesextension.evthandlers;
+package net.cakelancelot.heroes.extension.evthandlers;
 
 import com.smartfoxserver.v2.core.ISFSEvent;
 import com.smartfoxserver.v2.exceptions.SFSException;

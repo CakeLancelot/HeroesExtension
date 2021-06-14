@@ -1,4 +1,4 @@
-package net.cakelancelot.heroesextension;
+package net.cakelancelot.heroes.extension;
 
 import com.smartfoxserver.v2.core.SFSEventType;
 import com.smartfoxserver.v2.entities.Room;
@@ -7,8 +7,8 @@ import com.smartfoxserver.v2.entities.variables.RoomVariable;
 import com.smartfoxserver.v2.entities.variables.SFSRoomVariable;
 import com.smartfoxserver.v2.extensions.ISFSExtension;
 import com.smartfoxserver.v2.extensions.SFSExtension;
-import net.cakelancelot.heroesextension.shared.Mission;
-import net.cakelancelot.heroesextension.evthandlers.JoinRoomEventHandler;
+import net.cakelancelot.heroes.shared.Mission;
+import net.cakelancelot.heroes.extension.evthandlers.JoinRoomEventHandler;
 
 import java.util.*;
 
