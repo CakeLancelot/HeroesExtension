@@ -73,7 +73,7 @@ public class FindRoom extends BaseClientRequestHandler {
         roomProps.put("missionID", missionID);
         settings.setRoomProperties(roomProps);
 
-        String classPath = "net.cakelancelot.heroesextension.HeroesRoomExtension";
+        String classPath = "net.cakelancelot.heroes.extension.HeroesRoomExtension";
         settings.setExtension(new CreateRoomSettings.RoomExtensionSettings("Heroes", classPath));
 
         try {

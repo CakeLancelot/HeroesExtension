@@ -153,9 +153,6 @@ public class HeroesZoneExtension extends SFSExtension {
         if (doc.getElementsByTagName("soundtrack").getLength() == 1) {
             newMission.soundtrack = doc.getElementsByTagName("soundtrack").item(0).getTextContent();
             newMission.bossSoundtrack = doc.getElementsByTagName("boss_soundtrack").item(0).getTextContent();
-        } else {
-            newMission.soundtrack = "";
-            newMission.bossSoundtrack = "";
         }
 
         // TODO: read/set scripts and scriptData

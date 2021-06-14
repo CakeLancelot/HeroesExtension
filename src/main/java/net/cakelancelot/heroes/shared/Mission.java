@@ -7,8 +7,8 @@ public class Mission {
     public int capacity;
     public Vector3[] spawnPoints;
 
-    public String soundtrack;
-    public String bossSoundtrack;
+    public String soundtrack = "FFHeroes_musicLoop_junkyard";
+    public String bossSoundtrack = "FF_Heroes_Boss_Battle";
     public String assetBundle;
 
     String[] scripts;
