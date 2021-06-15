@@ -3,7 +3,7 @@ FFH uses a variety of server-side scripts in order to define how actors and wave
 Below is a list of all script names, scraped from the game's definition files. 
 
 These will eventually need to be recreated in order for the game to fully function. 
-There are some unused scripts that can be ignored, such as `training_*.groovy` and `Death_Match.groovy`.
+There are some unused scripts that can be ignored, such as `training_*.groovy` and `DeathMatch.groovy`.
 
 ```text
 WavesRandomProgression.groovy

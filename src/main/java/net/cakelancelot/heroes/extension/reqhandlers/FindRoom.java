@@ -62,16 +62,15 @@ public class FindRoom extends BaseClientRequestHandler {
         }
     }
 
-    public Room createNewGame(String missionID) {
+    private Room createNewGame(String missionID) {
         CreateRoomSettings settings = new CreateRoomSettings();
         Zone zone = getParentExtension().getParentZone();
 
-        settings.setName((new Date()).getTime() + "_" + zone.getTotalRoomCount());
+        // this is what the client expects for room name according to the AspenTracker class
+        // the mission name, a colon, and a unique game ID - ex. m_ruins_1p:849778179420
+        settings.setName(String.format("%s:%d", missionID, new Date().getTime()));
         settings.setGame(true);
         settings.setDynamic(true);
-        HashMap<Object, Object> roomProps = new HashMap<Object, Object>();
-        roomProps.put("missionID", missionID);
-        settings.setRoomProperties(roomProps);
 
         String classPath = "net.cakelancelot.heroes.extension.HeroesRoomExtension";
         settings.setExtension(new CreateRoomSettings.RoomExtensionSettings("Heroes", classPath));
@@ -84,9 +83,9 @@ public class FindRoom extends BaseClientRequestHandler {
         }
     }
 
-    // not sure if there is a way to determine which missions are meant to be searchable
+    // not sure if there is a way to determine which missions are meant for matchmaking
     // and which are meant to be accessible via dev menu only, so I'm hardcoding this for now
-    private String[] soloMissions = {
+    private final String[] soloMissions = {
             "m_ruins_1p",
             "m_junkyard_1p",
             "m_graveyard_1p",
@@ -99,7 +98,7 @@ public class FindRoom extends BaseClientRequestHandler {
     };
 
     // same here
-    private String[] partyMissions = {
+    private final String[] partyMissions = {
             "m_ruins_4p",
             "m_junkyard_4p",
             "m_graveyard_4p",

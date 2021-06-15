@@ -1,4 +1,4 @@
-package net.cakelancelot.heroes.shared;
+package net.cakelancelot.heroes.extension.models;
 
 import org.w3c.dom.Document;
 

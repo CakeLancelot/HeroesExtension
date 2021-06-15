@@ -6,8 +6,8 @@ import com.smartfoxserver.v2.extensions.SFSExtension;
 import net.cakelancelot.heroes.extension.evthandlers.LeaveZoneEventHandler;
 import net.cakelancelot.heroes.extension.evthandlers.JoinZoneEventHandler;
 import net.cakelancelot.heroes.extension.reqhandlers.*;
-import net.cakelancelot.heroes.shared.Mission;
-import net.cakelancelot.heroes.shared.Vector3;
+import net.cakelancelot.heroes.extension.models.Mission;
+import net.cakelancelot.heroes.extension.models.Vector3;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 

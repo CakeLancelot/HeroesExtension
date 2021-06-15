@@ -28,4 +28,20 @@ out/
 hs_err_pid*
 
 # FFH defintions
-definitions/*.xml
+deploy/definitions/*.xml
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Cache of project
+.gradletasknamecache
+
+# Ignore Gradle build output directory
+**/build/
+!src/**/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
