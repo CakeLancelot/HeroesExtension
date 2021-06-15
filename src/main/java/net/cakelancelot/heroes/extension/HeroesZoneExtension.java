@@ -1,10 +1,14 @@
 package net.cakelancelot.heroes.extension;
 
 import com.smartfoxserver.v2.core.SFSEventType;
+import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.extensions.SFSExtension;
+import net.cakelancelot.heroes.extension.evthandlers.JoinRoomEventHandler;
 import net.cakelancelot.heroes.extension.evthandlers.LeaveZoneEventHandler;
 import net.cakelancelot.heroes.extension.evthandlers.JoinZoneEventHandler;
+import net.cakelancelot.heroes.extension.evthandlers.RoomRemovalHandler;
+import net.cakelancelot.heroes.extension.models.Game;
 import net.cakelancelot.heroes.extension.reqhandlers.*;
 import net.cakelancelot.heroes.extension.models.Mission;
 import net.cakelancelot.heroes.extension.models.Vector3;
@@ -23,12 +27,15 @@ public class HeroesZoneExtension extends SFSExtension {
 
     HashMap<String, Element> actorDefinitions = new HashMap<>();
     HashMap<String, Mission> missions = new HashMap<>();
+    HashMap<Room, Game> runningGames = new HashMap<>();
 
     @Override
     public void init() {
         this.addEventHandler(SFSEventType.USER_JOIN_ZONE, JoinZoneEventHandler.class);
+        this.addEventHandler(SFSEventType.USER_JOIN_ROOM, JoinRoomEventHandler.class);
         this.addEventHandler(SFSEventType.USER_LOGOUT, LeaveZoneEventHandler.class);
         this.addEventHandler(SFSEventType.USER_DISCONNECT, LeaveZoneEventHandler.class);
+        this.addEventHandler(SFSEventType.ROOM_REMOVED, RoomRemovalHandler.class);
 
         // lobby
         this.addRequestHandler("req_keep_alive", KeepAlive.class);
@@ -56,16 +63,16 @@ public class HeroesZoneExtension extends SFSExtension {
         trace("Zone extension ready.");
     }
 
-    @Override
-    public Object handleInternalMessage(String cmdName, Object params) {
-        Object result = null;
+    public void registerGame(Room room, Game game) {
+        runningGames.put(room, game);
+    }
 
-        trace(params);
-        if (cmdName.equals("getMission")) {
-            result =  getMission((String) params);
-        }
+    public void deregisterGame(Room room) {
+        runningGames.remove(room);
+    }
 
-        return result;
+    public Game getGameByRoom(Room room) {
+        return runningGames.get(room);
     }
 
     private void loadDefinitions() throws IOException {
@@ -138,9 +145,11 @@ public class HeroesZoneExtension extends SFSExtension {
 
         for (int i = 0; i < points.getLength(); i++){
             NamedNodeMap attrs = points.item(i).getAttributes();
-            newMission.spawnPoints[i] = new Vector3(Double.parseDouble(attrs.getNamedItem("x").getTextContent()),
-                                                    Double.parseDouble(attrs.getNamedItem("y").getTextContent()),
-                                                    Double.parseDouble(attrs.getNamedItem("z").getTextContent()));
+            newMission.spawnPoints[i] = new Vector3 (
+                    Double.parseDouble(attrs.getNamedItem("x").getTextContent()),
+                    Double.parseDouble(attrs.getNamedItem("y").getTextContent()),
+                    Double.parseDouble(attrs.getNamedItem("z").getTextContent())
+            );
         }
 
         if (doc.getElementsByTagName("asset").getLength() == 1) {

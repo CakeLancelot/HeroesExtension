@@ -7,7 +7,7 @@ import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
 
 public class LeaveZoneEventHandler extends BaseServerEventHandler {
     @Override
-    public void handleServerEvent(ISFSEvent isfsEvent) throws SFSException {
+    public void handleServerEvent(ISFSEvent event) throws SFSException {
         // TODO: save player data on leave
     }
 }

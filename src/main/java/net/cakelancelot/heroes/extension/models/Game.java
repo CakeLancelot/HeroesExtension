@@ -1,31 +1,35 @@
-package net.cakelancelot.heroes.extension;
+package net.cakelancelot.heroes.extension.models;
 
-import com.smartfoxserver.v2.core.SFSEventType;
+import com.smartfoxserver.v2.api.ISFSApi;
 import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.entities.variables.RoomVariable;
 import com.smartfoxserver.v2.entities.variables.SFSRoomVariable;
-import com.smartfoxserver.v2.extensions.ISFSExtension;
-import com.smartfoxserver.v2.extensions.SFSExtension;
-import net.cakelancelot.heroes.extension.models.Mission;
-import net.cakelancelot.heroes.extension.evthandlers.JoinRoomEventHandler;
+import net.cakelancelot.heroes.extension.HeroesZoneExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
-public class HeroesRoomExtension extends SFSExtension {
-    Room room = null;
+public class Game {
+    Room room;
+    GameState state;
+    HeroesZoneExtension zoneExt;
 
-    @Override
-    public void init() {
+    Random random = new Random();
 
-        room = getParentRoom();
-        ISFSExtension zoneExt = room.getZone().getExtension();
-
-        Mission mission = (Mission) zoneExt.handleInternalMessage("getMission", getCurrentMission(room));
+    public Game (Room assignedRoom) {
+        this.room = assignedRoom;
+        this.state = GameState.WAITING_FOR_PLAYERS;
+        this.zoneExt = (HeroesZoneExtension) room.getZone().getExtension();
+        ISFSApi api = zoneExt.getApi();
 
         // set up everything needed for the game
         room.setProperty("searchable", true);
-        room.setMaxUsers(mission.capacity);
+        Mission mission = zoneExt.getMission(getCurrentMission(room));
+        room.setMaxUsers(1);
 
         List<RoomVariable> roomVars = new ArrayList<>();
         roomVars.add(new SFSRoomVariable("Act", mission.name));
@@ -33,10 +37,27 @@ public class HeroesRoomExtension extends SFSExtension {
         roomVars.add(new SFSRoomVariable("set", mission.assetBundle));
         roomVars.add(new SFSRoomVariable("soundtrack", mission.soundtrack));
         roomVars.add(new SFSRoomVariable("bossSoundtrack", mission.bossSoundtrack));
-        getApi().setRoomVariables(null, room, roomVars);
+        api.setRoomVariables(null, room, roomVars);
+    }
 
-        this.addEventHandler(SFSEventType.USER_JOIN_ROOM, JoinRoomEventHandler.class);
-        trace("Room extension ready.");
+    public void startGame() {
+        room.setProperty("searchable", false);
+        int startDelay = 3;
+
+        this.state = GameState.GAME_STARTING;
+        ISFSObject matchStartData = new SFSObject();
+        matchStartData.putInt("delay", startDelay);
+        zoneExt.send("cmd_match_starting", zoneExt.addTimeStamp(matchStartData), room.getUserList());
+
+        try {
+            TimeUnit.SECONDS.sleep(startDelay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        this.state = GameState.IN_GAME_PRE_WAVE;
+        ISFSObject roomReadyData = new SFSObject();
+        zoneExt.send("cmd_room_ready", zoneExt.addTimeStamp(roomReadyData), room.getUserList());
     }
 
     private String getCurrentMission(Room room) {
@@ -44,10 +65,9 @@ public class HeroesRoomExtension extends SFSExtension {
         return fullName.split(":", 2)[0];
     }
 
-    public ISFSObject addTimeStamp(ISFSObject data) {
-        Date date = new Date();
-        data.putLong("timestamp", date.getTime());
-        return data;
+    private String getRandomTip() {
+        int index = random.nextInt(tips.length);
+        return tips[index];
     }
 
     private final String[] tips = {
@@ -78,10 +98,13 @@ public class HeroesRoomExtension extends SFSExtension {
         "Enemies will taunt you before they attack. Learn to predict their movements!",
         "You earn more coins for teaming up in a 4-player PARTY than you do playing a SOLO game by yourself."
     };
+}
 
-    Random random = new Random();
-    private String getRandomTip() {
-        int index = random.nextInt(tips.length);
-        return tips[index];
-    }
+enum GameState {
+    WAITING_FOR_PLAYERS,
+    GAME_STARTING,
+    IN_GAME_PRE_WAVE,
+    IN_GAME_DURING_WAVE,
+    IN_GAME_ENDING_WAVE,
+    RESULTS_SCREEN
 }

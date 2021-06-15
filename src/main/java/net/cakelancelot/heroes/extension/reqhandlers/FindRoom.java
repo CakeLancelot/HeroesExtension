@@ -10,6 +10,8 @@ import com.smartfoxserver.v2.entities.variables.UserVariable;
 import com.smartfoxserver.v2.exceptions.SFSCreateRoomException;
 import com.smartfoxserver.v2.exceptions.SFSJoinRoomException;
 import com.smartfoxserver.v2.extensions.BaseClientRequestHandler;
+import net.cakelancelot.heroes.extension.HeroesZoneExtension;
+import net.cakelancelot.heroes.extension.models.Game;
 
 import java.util.*;
 
@@ -28,7 +30,7 @@ public class FindRoom extends BaseClientRequestHandler {
         // determine which button they pressed
         if (params.containsKey("roomName")) {
             trace(sender.getName() + " has requested to create a dev match.");
-            roomToJoin = createNewGame(params.getUtfString("roomName"));
+            roomToJoin = requestGameRoom(params.getUtfString("roomName"));
         }
         else if (params.getInt("numberOfPlayers") == 4) {
             trace(sender.getName() + " has queued for a party match.");
@@ -41,14 +43,14 @@ public class FindRoom extends BaseClientRequestHandler {
             } else {
                 int index = random.nextInt(partyMissions.length);
                 String selected = partyMissions[index];
-                roomToJoin = createNewGame(selected);
+                roomToJoin = requestGameRoom(selected);
             }
         }
         else if (params.getInt("numberOfPlayers") == 1) {
             trace(sender.getName() + " has queued for a solo match.");
             int index = random.nextInt(soloMissions.length);
             String selected = soloMissions[index];
-            roomToJoin = createNewGame(selected);
+            roomToJoin = requestGameRoom(selected);
         }
         else {
             trace("Bad find room request");
@@ -62,9 +64,10 @@ public class FindRoom extends BaseClientRequestHandler {
         }
     }
 
-    private Room createNewGame(String missionID) {
+    private Room requestGameRoom (String missionID) {
         CreateRoomSettings settings = new CreateRoomSettings();
-        Zone zone = getParentExtension().getParentZone();
+        HeroesZoneExtension zoneExt = (HeroesZoneExtension) getParentExtension();
+        Zone zone = zoneExt.getParentZone();
 
         // this is what the client expects for room name according to the AspenTracker class
         // the mission name, a colon, and a unique game ID - ex. m_ruins_1p:849778179420
@@ -72,15 +75,19 @@ public class FindRoom extends BaseClientRequestHandler {
         settings.setGame(true);
         settings.setDynamic(true);
 
-        String classPath = "net.cakelancelot.heroes.extension.HeroesRoomExtension";
-        settings.setExtension(new CreateRoomSettings.RoomExtensionSettings("Heroes", classPath));
+        Room roomCreated = null;
 
         try {
-            return zone.createRoom(settings, null);
+            roomCreated = zone.createRoom(settings, null);
         } catch(SFSCreateRoomException e) {
             e.printStackTrace();
             return null;
         }
+
+        Game gameCreated = new Game(roomCreated);
+        zoneExt.registerGame(roomCreated, gameCreated);
+
+        return roomCreated;
     }
 
     // not sure if there is a way to determine which missions are meant for matchmaking
