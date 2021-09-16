@@ -8,6 +8,8 @@ import com.smartfoxserver.v2.entities.variables.SFSUserVariable;
 import com.smartfoxserver.v2.entities.variables.UserVariable;
 import com.smartfoxserver.v2.extensions.BaseClientRequestHandler;
 import net.cakelancelot.heroes.extension.HeroesZoneExtension;
+import net.cakelancelot.heroes.extension.models.Game;
+import net.cakelancelot.heroes.extension.models.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,15 +21,17 @@ public class SpawnActor extends BaseClientRequestHandler {
 
         HeroesZoneExtension parentExt = (HeroesZoneExtension) getParentExtension();
         Room currentRoom = sender.getLastJoinedRoom();
+        Game runningGame = parentExt.getGameByRoom(currentRoom);
 
         ISFSObject createActorData = new SFSObject();
         createActorData.putUtfString("id", String.valueOf(sender.getId()));
         createActorData.putUtfString("actor", sender.getVariable("actor").getStringValue());
 
-        ISFSObject spawnPoint = new SFSObject(); // TODO: get a spawn point from current mission data
-        spawnPoint.putFloat("x", -2);
-        spawnPoint.putFloat("y", 0);
-        spawnPoint.putFloat("z", -12);
+        Vector3 selectedSpawn = runningGame.getNextSpawnPoint();
+        ISFSObject spawnPoint = new SFSObject();
+        spawnPoint.putFloat("x", (float) selectedSpawn.x);
+        spawnPoint.putFloat("y", (float) selectedSpawn.y);
+        spawnPoint.putFloat("z", (float) selectedSpawn.z);
         spawnPoint.putFloat("rotation", 0);
         createActorData.putSFSObject("spawn_point", spawnPoint);
 
@@ -40,8 +44,8 @@ public class SpawnActor extends BaseClientRequestHandler {
         parentExt.send("cmd_set_speed", parentExt.addTimeStamp(setSpeedData), sender);
 
         List<UserVariable> vars = new ArrayList<>();
-        vars.add(new SFSUserVariable("health", 500));
-        vars.add(new SFSUserVariable("p_health", 1.0)); // hp percentage (used for bar ui)
+        vars.add(new SFSUserVariable("health", 500)); // TODO: read health from  actor definition
+        vars.add(new SFSUserVariable("p_health", 1.0)); // hp percentage (used for bar gui)
         vars.add(new SFSUserVariable("dextronium", 0)); // each segment is 200, full is 1000
         getApi().setUserVariables(sender, vars);
     }

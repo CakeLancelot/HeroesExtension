@@ -20,11 +20,7 @@ public class HitActor extends BaseClientRequestHandler {
             int newDextronium;
             int increment = 50; // TODO: should be calculated using hero's dex gain stat and dmg result
 
-            if ((currentDextronium + increment) > 1000) {
-                newDextronium = 1000;
-            } else {
-                newDextronium = currentDextronium + increment;
-            }
+            newDextronium = Math.min((currentDextronium + increment), 1000);
 
             List<UserVariable> vars = new ArrayList<>();
             vars.add(new SFSUserVariable("dextronium", newDextronium));

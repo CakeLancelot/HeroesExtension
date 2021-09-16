@@ -30,7 +30,13 @@ public class FindRoom extends BaseClientRequestHandler {
         // determine which button they pressed
         if (params.containsKey("roomName")) {
             trace(sender.getName() + " has requested to create a dev match.");
-            roomToJoin = requestGameRoom(params.getUtfString("roomName"));
+            roomToJoin = requestGameRoom(params.getUtfString("roomName"), 1); // TODO : don't hardcode capacity
+        }
+        else if (params.getInt("numberOfPlayers") == 1) {
+            trace(sender.getName() + " has queued for a solo match.");
+            int index = random.nextInt(soloMissions.length);
+            String selected = soloMissions[index];
+            roomToJoin = requestGameRoom(selected, 1);
         }
         else if (params.getInt("numberOfPlayers") == 4) {
             trace(sender.getName() + " has queued for a party match.");
@@ -43,28 +49,25 @@ public class FindRoom extends BaseClientRequestHandler {
             } else {
                 int index = random.nextInt(partyMissions.length);
                 String selected = partyMissions[index];
-                roomToJoin = requestGameRoom(selected);
+                roomToJoin = requestGameRoom(selected, 4);
             }
         }
-        else if (params.getInt("numberOfPlayers") == 1) {
-            trace(sender.getName() + " has queued for a solo match.");
-            int index = random.nextInt(soloMissions.length);
-            String selected = soloMissions[index];
-            roomToJoin = requestGameRoom(selected);
-        }
         else {
-            trace("Bad find room request");
+            trace("Bad find room request. User: ", sender.getName());
+            trace("Packet dump: ", params.getDump());
             return;
         }
 
         try {
             getApi().joinRoom(sender, roomToJoin);
         } catch (SFSJoinRoomException e) {
+            trace("Unable to join player to matchmaking room. Stacktrace:");
             e.printStackTrace();
         }
     }
 
-    private Room requestGameRoom (String missionID) {
+    private Room requestGameRoom (String missionID, int capacity) {
+        Objects.requireNonNull(missionID);
         CreateRoomSettings settings = new CreateRoomSettings();
         HeroesZoneExtension zoneExt = (HeroesZoneExtension) getParentExtension();
         Zone zone = zoneExt.getParentZone();
@@ -74,12 +77,14 @@ public class FindRoom extends BaseClientRequestHandler {
         settings.setName(String.format("%s:%d", missionID, new Date().getTime()));
         settings.setGame(true);
         settings.setDynamic(true);
+        settings.setMaxUsers(capacity);
 
         Room roomCreated = null;
 
         try {
             roomCreated = zone.createRoom(settings, null);
         } catch(SFSCreateRoomException e) {
+            trace("Unable to create matchmaking room. Stacktrace:");
             e.printStackTrace();
             return null;
         }

@@ -31,13 +31,14 @@ public class HeroesZoneExtension extends SFSExtension {
 
     @Override
     public void init() {
+        trace("Registering event handlers...");
         this.addEventHandler(SFSEventType.USER_JOIN_ZONE, JoinZoneEventHandler.class);
         this.addEventHandler(SFSEventType.USER_JOIN_ROOM, JoinRoomEventHandler.class);
         this.addEventHandler(SFSEventType.USER_LOGOUT, LeaveZoneEventHandler.class);
         this.addEventHandler(SFSEventType.USER_DISCONNECT, LeaveZoneEventHandler.class);
         this.addEventHandler(SFSEventType.ROOM_REMOVED, RoomRemovalHandler.class);
 
-        // lobby
+        trace("Registering lobby request handlers...");
         this.addRequestHandler("req_keep_alive", KeepAlive.class);
         this.addRequestHandler("req_find_room", FindRoom.class);
         this.addRequestHandler("req_buy_item", BuyItem.class);
@@ -45,7 +46,7 @@ public class HeroesZoneExtension extends SFSExtension {
         this.addRequestHandler("req_delayed_login", Stub.class);
         this.addRequestHandler("req_admin_command", Stub.class);
 
-        // game
+        trace("Registering game request handlers...");
         this.addRequestHandler("req_spawn_actor", SpawnActor.class);
         this.addRequestHandler("req_move_actor", MoveActor.class);
         this.addRequestHandler("req_pickup_item", PickupItem.class);
@@ -54,11 +55,21 @@ public class HeroesZoneExtension extends SFSExtension {
         this.addRequestHandler("req_power_attack_actor", Attack.class);
         this.addRequestHandler("req_super_attack_actor", Attack.class);
 
+        trace("Loading definition files...");
         try {
             loadDefinitions();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        /*
+        trace("Attempting database connection...");
+        try {
+            databaseInit();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
 
         trace("Zone extension ready.");
     }

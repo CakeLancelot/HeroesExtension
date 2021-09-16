@@ -10,12 +10,16 @@ import net.cakelancelot.heroes.extension.HeroesZoneExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Game {
     Room room;
     GameState state;
+    Mission mission;
+    int nextSpawn = 0;
+
     HeroesZoneExtension zoneExt;
 
     Random random = new Random();
@@ -24,12 +28,11 @@ public class Game {
         this.room = assignedRoom;
         this.state = GameState.WAITING_FOR_PLAYERS;
         this.zoneExt = (HeroesZoneExtension) room.getZone().getExtension();
-        ISFSApi api = zoneExt.getApi();
 
         // set up everything needed for the game
         room.setProperty("searchable", true);
-        Mission mission = zoneExt.getMission(getCurrentMission(room));
-        room.setMaxUsers(1);
+        mission = zoneExt.getMission(getCurrentMission(room));
+        Objects.requireNonNull(room);
 
         List<RoomVariable> roomVars = new ArrayList<>();
         roomVars.add(new SFSRoomVariable("Act", mission.name));
@@ -37,7 +40,7 @@ public class Game {
         roomVars.add(new SFSRoomVariable("set", mission.assetBundle));
         roomVars.add(new SFSRoomVariable("soundtrack", mission.soundtrack));
         roomVars.add(new SFSRoomVariable("bossSoundtrack", mission.bossSoundtrack));
-        api.setRoomVariables(null, room, roomVars);
+        zoneExt.getApi().setRoomVariables(null, room, roomVars);
     }
 
     public void startGame() {
@@ -63,6 +66,13 @@ public class Game {
     private String getCurrentMission(Room room) {
         String fullName = room.getName();
         return fullName.split(":", 2)[0];
+    }
+
+    public Vector3 getNextSpawnPoint() {
+        if (nextSpawn == this.mission.spawnPoints.length) {
+            nextSpawn = 0;
+        }
+        return mission.spawnPoints[nextSpawn];
     }
 
     private String getRandomTip() {
