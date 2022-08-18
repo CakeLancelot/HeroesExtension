@@ -29,7 +29,7 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Download SFS2X
-      run: wget -qO- https://www.smartfoxserver.com/downloads/sfs2x/SFS2X_unix_2_18_0.tar.gz | tar xvz -C /target/directory ~
+      run: wget -qO- https://www.smartfoxserver.com/downloads/sfs2x/SFS2X_unix_2_18_0.tar.gz | tar xvz -C ~
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
