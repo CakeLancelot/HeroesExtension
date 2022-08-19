@@ -1,5 +1,5 @@
 # HeroesExtension
-[![Releases Badge](https://img.shields.io/github/v/release/CakeLancelot/HeroesExtension)](https://img.shields.io/github/v/release/CakeLancelot/HeroesExtension?include_prereleases)
+[![Releases Badge](https://img.shields.io/github/v/release/CakeLancelot/HeroesExtension?include_prereleases)](https://github.com/CakeLancelot/HeroesExtension/releases)
 [![Build Status Badge](https://github.com/CakeLancelot/HeroesExtension/actions/workflows/gradle.yml/badge.svg)](https://github.com/CakeLancelot/HeroesExtension/actions/workflows/gradle.yml)
 [![Discord Badge](https://img.shields.io/discord/847806741295136789?color=687DC5&logo=discord)](https://discord.gg/PFVFQH9hrD)
 
