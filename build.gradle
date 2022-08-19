@@ -2,14 +2,6 @@ apply plugin: 'java'
 group 'net.cakelancelot'
 version '1.0-SNAPSHOT'
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src']
-        }
-    }
-}
-
 ext.getSFS2XPath = {
     // TODO make sure this works for OSes other than Windows
     if (System.getenv('SFS2X_HOME') == null) {
@@ -42,7 +34,7 @@ tasks.withType(JavaCompile) {
 }
 
 jar {
-    archiveName = "HeroesZoneExtension.jar"
+    archiveFileName = "HeroesZoneExtension.jar"
 }
 
 dependencies {
