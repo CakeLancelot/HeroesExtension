@@ -13,7 +13,7 @@ ext.getSFS2XPath = {
 
 tasks.register('copySFS2XLibs', Copy) {
     if (getSFS2XPath() == null) {
-        throw new GradleException('Unable to find SFS2X - please install it or set up SFS2X_HOME environment variable.')
+        throw new FileNotFoundException('Unable to find SFS2X - please install it or set up SFS2X_HOME environment variable.')
     }
 
     def SFS2XLibPath = new File(getSFS2XPath(), 'lib')
