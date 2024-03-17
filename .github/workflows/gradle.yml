@@ -13,13 +13,13 @@ on:
     paths:
     - src/**
     - build.gradle
-    - .github/workflows/gradle.yaml
+    - .github/workflows/gradle.yml
   pull_request:
     branches: [ "master" ]
     paths:
     - src/**
     - build.gradle
-    - .github/workflows/gradle.yaml
+    - .github/workflows/gradle.yml
 
 permissions:
   contents: read
@@ -37,7 +37,7 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Download SFS2X
-      run: wget -qO- https://www.smartfoxserver.com/downloads/sfs2x/SFS2X_unix_2_18_0.tar.gz | tar xvz -C ~
+      run: wget -qO- https://www.smartfoxserver.com/downloads/sfs2x/SFS2X_unix_2_19_0.tar.gz | tar xvz -C ~
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
